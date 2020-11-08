@@ -50,16 +50,16 @@ app.use(morgan("dev"))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(express.static(__dirname + "./public"));; // for serving the HTML file
+app.use(express.static(__dirname + "/public/"));; // for serving the HTML file
 
 
 //Handle Production
 if (process.env.NODE_ENV === "production") {
-    console.log("BUrada")
-    app.use(express.static(__dirname + "./public/"));
+    console.log ("BUrada")
+    app.use(express.static(__dirname + "/public/"));
     //Handle SPA
-    app.get(/.*/, (req, res) => {
-        res.sendFile(path.resolve(__dirname, '. /public', 'index.html'));
+    app.get(/.*/,(req,res)=>{
+        res.sendFile(__dirname+"/public/index.html");
     })
 }
 
