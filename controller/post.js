@@ -94,7 +94,9 @@ var createPost = async (req, res, next) => {
             success: "Post Eklendi !"
         })
     } catch (error) {
-        console.log(error.message)
+        res.send({
+            error:error.message
+        })
     }
 
 }

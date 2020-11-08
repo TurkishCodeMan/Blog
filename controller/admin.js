@@ -23,7 +23,7 @@ var createCategory=async(req,res,next)=>{
     try {
         await category.save();
         res.send({
-            success: "Post Eklendi !"
+            success: "Category Eklendi !"
         })
     } catch (error) {
         console.log(error.message)
