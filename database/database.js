@@ -5,7 +5,6 @@ const SessionStore = require('express-session-sequelize')(expressSession.Store);
 const sequelize = new Sequelize("ddc8dqdvotr9id", "vwoxgosdgpiaig", "107b2dccde3834ac287ccde510808057512154d0940ecf7c5e592431263e2a34", {
     host: 'ec2-52-86-116-94.compute-1.amazonaws.com',
     dialect: "postgres",
-    protocol: 'postgres',
     dialectOptions: {
         ssl: { rejectUnauthorized: false }
     },
