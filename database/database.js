@@ -2,15 +2,21 @@ const Sequelize = require("sequelize").Sequelize;
 const expressSession = require('express-session');
 const SessionStore = require('express-session-sequelize')(expressSession.Store);
 
-const sequelize=new Sequelize("etoqciua","etoqciua","Xypr6nLKiaVIY96wIrPCATNj_ZR8tlRy" ,{
-    host: 'lallah.db.elephantsql.com',
-    dialect: "postgres"
+const sequelize = new Sequelize("ddc8dqdvotr9id", "vwoxgosdgpiaig", "107b2dccde3834ac287ccde510808057512154d0940ecf7c5e592431263e2a34", {
+    host: 'ec2-52-86-116-94.compute-1.amazonaws.com',
+    dialect: "postgres",
+    protocol: 'postgres',
+    dialectOptions: {
+        ssl: { rejectUnauthorized: false }
+    },
+   
 
 });
 
+
 const sequelizeSessionStore = new SessionStore({//Session Save
     db: sequelize,
-    expiration:120000,
+    expiration: 120000,
 });
 
 var connect = async () => {
@@ -28,11 +34,11 @@ var sync = async () => {
         console.log("All models were synchronized successfully.");
     } catch (error) {
         console.log(error.message);
-        
-    }
-} 
 
-module.exports={
+    }
+}
+
+module.exports = {
     connect,
     sync,
     sequelize,
