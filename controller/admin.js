@@ -2,6 +2,7 @@
 const User = require("../models/user");
 const Category = require("../models/category");
 const Post = require("../models/post");
+const Post_Category = require("../models/Post_Category");
 
 
 var getAllUser=async (req,res,next)=>{
@@ -65,10 +66,16 @@ var deleteUser=async (req,res,next)=>{
     var userId=req.params.id;
 
     try {
+        await Post.destroy({where:{userId:userId}});
+
+
+
         await User.destroy({where:{id:userId}});
         res.send({
             deleteUser:true,
         })
+
+
     } catch (error) {
         console.log(error);
     }
@@ -78,6 +85,7 @@ var deleteCategory=async (req,res,next)=>{
     var catId=req.params.id;
 
     try {
+
         await Category.destroy({where:{id:catId}});
         res.send({
             deleteCategory:true,
