@@ -15,7 +15,7 @@ const sequelize = new Sequelize("ddc8dqdvotr9id", "vwoxgosdgpiaig", "107b2dccde3
 
 const sequelizeSessionStore = new SessionStore({//Session Save
     db: sequelize,
-    expiration: 120000,
+    expiration: 1200000,
 });
 
 var connect = async () => {
@@ -29,7 +29,7 @@ var connect = async () => {
 
 var sync = async () => {
     try {
-        await sequelize.sync({force:true});
+        await sequelize.sync();
         console.log("All models were synchronized successfully.");
     } catch (error) {
         console.log(error.message);
