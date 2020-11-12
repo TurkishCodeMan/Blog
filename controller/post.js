@@ -1,5 +1,6 @@
 
 const Category = require("../models/category");
+const Commit = require("../models/commit");
 const Post = require("../models/post");
 const User = require("../models/user");
 
@@ -21,8 +22,10 @@ var getPostById = async (req, res, next) => {
     try {
         console.log(req.params.id)
         const post = await Post.findByPk(req.params.id);
+        const commits = await post.getCommits({ include: ["user"] });
         res.send({
-            post
+            post,
+            commits
         })
     } catch (error) {
         console.log(error);
@@ -65,40 +68,60 @@ var getMyPost = async (req, res, next) => {
 }
 
 var createPost = async (req, res, next) => {
-
-    const file = req.file
+    console.log(req.body)
+    // const file = req.file
     const post = new Post();
     post.title = req.body.title;
     post.description = req.body.description;
     post.userId = req.user.id
-    post.imageUrl=file.filename
+    //post.imageUrl=file.filename
     console.log(req.body.selectedCategory)
-    let selectedCategory=JSON.parse(req.body.selectedCategory);//Gelen jsonu parse ettik
+    let selectedCategory = JSON.parse(req.body.selectedCategory);//Gelen jsonu parse ettik
 
-    //BUrada file varmı yokmu kontrolü yapılacak
+    //Burada file varmı yokmu kontrolü yapılacak
     try {
-
 
         await post.save();
 
         //Categorisini ekleme
         console.log(selectedCategory);
-        const categories = await Category.findAll({ where: { id: selectedCategory} });
+        const categories = await Category.findAll({ where: { id: selectedCategory } });
         post.addCategories(categories);
 
 
         await post.update();
 
         res.send({
-            isAuthenticated:req.session.isAuthenticated,
+            isAuthenticated: req.session.isAuthenticated,
             success: "Post Eklendi !"
         })
     } catch (error) {
         res.send({
-            error:error.message
+            error: error.message
         })
     }
 
+}
+
+const addCommitOnPost = async (req, res, next) => {
+    console.log(req.body)
+    console.log("bURAS")
+    try {
+        let commit = new Commit();
+        commit.description = req.body.commit;
+        commit.userId=req.user.id;
+        await commit.save();
+        const post = await Post.findByPk(req.body.postId);
+        await post.addCommit(commit);
+
+        res.send({
+            successCommit: "Commit Add This Post" + req.body.postId,
+        })
+    } catch (error) {
+        res.send({
+            error: error.message
+        })
+    }
 }
 
 
@@ -108,5 +131,6 @@ module.exports = {
     getAllCategories,
     getProductByCategory,
     getMyPost,
-    createPost
+    createPost,
+    addCommitOnPost
 }

@@ -16,19 +16,17 @@ const User = require("./models/user");
 const Post = require("./models/post");
 const Category = require("./models/category");
 const path = require("path");
+const Commit = require("./models/commit");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "./public/img");
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));//image-3223132.jpg olacak
-    }
-})
-
-app.use(multer({ storage: storage }).single("file"));
-
-
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, "./public/img");
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));//image-3223132.jpg olacak
+//     }
+// })
+app.use(multer({dest:'./public/img'}).any());//FormData Göndermek için
 
 app.use(cookieParser());
 app.use(session({
@@ -55,12 +53,9 @@ app.use(express.static(__dirname + "/public/"));; // for serving the HTML file
 
 //Handle Production
 if (process.env.NODE_ENV === "production") {
-    console.log ("BUrada")
+    console.log("BUrada")
     app.use(express.static(__dirname + "/public/"));
-    //Handle SPA
-    // app.get(/.*/,(req,res)=>{
-    //     res.sendFile(__dirname+"/public/","index.html");
-    // })
+
 }
 
 
@@ -100,6 +95,12 @@ sync()
             await user.createPost({ title: "Deneme", description: "Bu bir deneme yazisidirrrrrr" })
             const post1 = await Post.create({ title: "Deneme", description: "Bu bir deneme yazisidir" });
             const post2 = await Post.create({ title: "Deneme", description: "Bu bir deneme yazisidir" })
+            
+            const commit=await user.createCommit({description:"Güzel Bir yazıymıs begendim !"})
+            await post1.addCommits([commit]);
+
+
+
             await user.addPosts([post1, post2]);
             const category1 = await Category.create({ name: "Saglik", description: "Saglik hakkinda" });
             const category2 = await Category.create({ name: "Bilim", description: "Bilim hakkinda" });
@@ -112,7 +113,7 @@ sync()
 
         var server_port = process.env.YOUR_PORT || process.env.PORT || 3000;
         var server_host = process.env.YOUR_HOST || '0.0.0.0';
-        app.listen(server_port, server_host, function() {
+        app.listen(server_port, server_host, function () {
             console.log('Listening on port %d', server_port);
         });
     })

@@ -15,6 +15,6 @@ router.get("/categories/:id",postController.getProductByCategory);
 
 
 router.post("/create-post",authControl,postController.createPost);
-
+router.post("/add-commit-post",authControl,postController.addCommitOnPost);
 
 module.exports = router;

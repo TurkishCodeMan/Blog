@@ -11,7 +11,15 @@ const sequelize = new Sequelize("ddc8dqdvotr9id", "vwoxgosdgpiaig", "107b2dccde3
    
 
 });
+// const sequelize = new Sequelize("postgres", "postgres", "4052", {
+//     host: 'localhost',
+//     dialect: "postgres",
+//     dialectOptions: {
+//         ssl: { rejectUnauthorized: false }
+//     },
+   
 
+// });
 
 const sequelizeSessionStore = new SessionStore({//Session Save
     db: sequelize,
