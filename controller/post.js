@@ -8,6 +8,7 @@ var getIndex = async (req, res, next) => {
     //Databaseden Tüm Postlar Indexlerine Göre Alınıp Gönderilecek
     try {
         const posts = await Post.findAll({ include: User });//User ı da yükler
+        
         res.send({
             posts,
         })
@@ -124,6 +125,15 @@ const addCommitOnPost = async (req, res, next) => {
     }
 }
 
+const deleteCommit=async(req,res,next)=>{
+    console.log(req.params.id);
+    let commit = await Commit.findByPk(req.params.id);
+    await commit.destroy();
+    res.send({
+        deleteCommit:true,
+    })
+}
+
 
 module.exports = {
     getIndex,
@@ -132,5 +142,6 @@ module.exports = {
     getProductByCategory,
     getMyPost,
     createPost,
-    addCommitOnPost
+    addCommitOnPost,
+    deleteCommit
 }
